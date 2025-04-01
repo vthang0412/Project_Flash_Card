@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #nav{
     display: flex;
     justify-content: space-between;
@@ -99,4 +100,209 @@ nav a:hover {
     color: #dc3545;
     font-size: 0.875rem;
     margin-top: 0.25rem;
+=======
+/* Đặt lại các kiểu mặc định */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    /* Font chữ */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F3F4F6;
+    /* Màu nền xám nhạt */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Container chính */
+.app {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Thanh điều hướng */
+nav {
+    background-color: #ffffff;
+    /* Màu nền trắng */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Đổ bóng nhẹ */
+    padding: 16px 20px;
+    /* Giảm padding để tránh tràn */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* Tách logo và nút */
+    align-items: center;
+    /* Căn giữa theo chiều dọc */
+    width: 100%;
+    /* Chiều rộng đầy đủ */
+    height: 64px;
+    /* Chiều cao cố định */
+    position: fixed;
+    /* Cố định ở đầu trang */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    /* Đảm bảo nằm trên các thành phần khác */
+    border-bottom: 1px solid #e5e7eb;
+    /* Đường viền mỏng ở dưới */
+    box-sizing: border-box;
+    /* Đảm bảo padding được tính trong chiều rộng */
+    overflow: hidden;
+    /* Ngăn nội dung tràn */
+}
+
+nav .logo {
+    color: #333;
+    /* Màu chữ của logo */
+    font-family: Arial, sans-serif;
+    /* Font chữ */
+    font-size: 18.9px;
+    /* Kích thước chữ */
+    font-weight: bold;
+    /* Chữ đậm */
+    text-transform: uppercase;
+    /* Chuyển chữ thành in hoa */
+    margin: 0;
+    /* Loại bỏ khoảng cách mặc định */
+    padding: 17.5px 0 18.5px 104px;
+}
+
+/* Nút trong thanh điều hướng */
+nav .flexbutton {
+    display: flex;
+    gap: 16px;
+    /* Khoảng cách giữa các nút */
+    padding: 12px 104px 12px 0;
+}
+
+nav .flexbutton button {
+    padding: 8px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 19.6px;
+    line-height: 24px;
+}
+
+nav .flexbutton .bg-blue-500 {
+    background-color: #007bff;
+    /* Nút màu xanh dương */
+    color: #FFFFFF;
+}
+
+nav .flexbutton .bg-blue-500:hover {
+    background-color: #0056b3;
+}
+
+nav .flexbutton .bg-green-500 {
+    background-color: #28a745;
+    /* Nút màu xanh lá */
+    color: #FFFFFF;
+}
+
+nav .flexbutton .bg-green-500:hover {
+    background-color: #218838;
+}
+
+/* Container của form đăng nhập */
+.max-w-md {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 100px auto 40px auto;
+    /* Thêm khoảng cách dưới thanh điều hướng */
+}
+
+.max-w-md h2 {
+    font-size: 19.6px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Label trong form */
+label {
+    font-size: 19.6px;
+    line-height: 24px;
+    color: #374151;
+}
+
+/* Trường nhập liệu trong form */
+.max-w-md form input {
+    width: 100%;
+    /* Chiều rộng đầy đủ */
+    padding: 10px 15px;
+    /* Padding để tạo khoảng cách */
+    margin-bottom: 15px;
+    /* Khoảng cách giữa các trường */
+    border: 1px solid #ccc;
+    /* Viền mỏng */
+    border-radius: 5px;
+    /* Bo góc */
+    font-size: 19.6px;
+    /* Kích thước chữ */
+    line-height: 24px;
+    /* Chiều cao dòng */
+    color: #374151;
+    /* Màu chữ */
+    box-sizing: border-box;
+    /* Bao gồm padding trong chiều rộng */
+}
+
+/* Nút trong form */
+.max-w-md form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.max-w-md form button:hover {
+    background-color: #0056b3;
+}
+
+/* Footer */
+footer {
+    background-color: #ffffff;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    color: #666;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    /* Chiều rộng đầy đủ */
+    position: fixed;
+    /* Cố định ở cuối trang */
+    bottom: 0;
+    left: 0;
+}
+
+/* Màu nền xám nhạt */
+.bg-gray-100 {
+    background-color: #f3f4f6;
+}
+
+/* Nút chiều rộng đầy đủ */
+.w-full {
+    width: 100%;
+>>>>>>> fd90171696a05c9520a81ddf8cd5f35707c40f9d
 }
