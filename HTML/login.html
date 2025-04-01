@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - VocabApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/style.css">
+</head>
+
+<body>
+    <div class=" flex flex-col">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex justify-between items-center h-16" id="nav">
+                    <!-- Logo bên trái -->
+                    <a href="../index.html" class="text-xl font-bold text-gray-800">VocabApp</a>
+                    
+                    <!-- Nút Login và Register bên phải -->
+                    <div class="flex space-x-4  ">
+                        <a href="login.html" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-center">Login</a>
+                        <a href="register.html" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-center">Register</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto px-4 py-8">
+            <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Email</label>
+                        <input type="email" id="loginEmail" class="w-full px-3 py-2 border rounded" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Password</label>
+                        <input type="password" id="loginPassword" class="w-full px-3 py-2 border rounded" required>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+                        Login
+                    </button>
+                </form>
+                <div id="loginError" class="mt-4 text-red-500 text-center"></div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white shadow-lg">
+            <div class="max-w-7xl mx-auto py-3 px-3">
+                <p class="text-center text-gray-600">© 2024 VocabApp. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.getElementById('loginForm').addEventListener('submit', function (element) {
+    element.preventDefault();
+
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    const error = document.getElementById('loginError');
+
+    if (!email) {
+        error.textContent = 'Email không được để trống';
+        error.classList.remove('hidden');
+        return;
+    }
+
+    if (!password) {
+        error.textContent = 'Password không được để trống';
+        error.classList.remove('hidden');
+        return;
+    }
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(user => user.email === email && user.password === password);
+
+    if (!user) {
+        error.textContent = 'Email hoặc mật khẩu không hợp lệ';
+        error.classList.remove('hidden');
+        return;
+    }
+
+    alert('Đăng nhập thành công!');
+    window.location.href = 'dashboard.html';
+});
+    </script>
+</body>
+
+</html>
