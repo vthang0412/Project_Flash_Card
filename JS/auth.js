@@ -1,3 +1,18 @@
+// Function to show notification modal
+function showNotification(message, callback) {
+    const notificationModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+    document.getElementById('notificationMessage').textContent = message;
+    
+    // Handle modal hidden event
+    const modalElement = document.getElementById('notificationModal');
+    modalElement.addEventListener('hidden.bs.modal', function handler() {
+        modalElement.removeEventListener('hidden.bs.modal', handler);
+        if (callback) callback();
+    });
+    
+    notificationModal.show();
+}
+
 // Xử lý form đăng ký
 document.addEventListener("DOMContentLoaded", function () {
     const registerForm = document.getElementById("registerForm");
@@ -129,15 +144,12 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.setItem("users", JSON.stringify(users));
 
             alert("Registration successful!");
-            window.location.href = "login.html"; // Chuyển hướng đến trang đăng nhập
+            window.location.href = "login.html";
         });
     }
-});
 
-// Xử lý form đăng nhập
-document.addEventListener("DOMContentLoaded", function () {
+    // Xử lý form đăng nhập
     const loginForm = document.getElementById("loginForm");
-
     if (loginForm) {
         loginForm.addEventListener("submit", function (e) {
             e.preventDefault(); // Ngăn chặn reload trang
@@ -196,8 +208,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // Đăng nhập thành công
             localStorage.setItem('currentUser', JSON.stringify(user));
             alert("Login successful!");
-            window.location.href = "dashboard.html"; // Chuyển hướng đến trang Dashboard
+            window.location.href = "dashboard.html";
         });
     }
 });
 
+    // Xử lý logout

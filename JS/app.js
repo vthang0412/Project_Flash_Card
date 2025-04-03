@@ -1,7 +1,7 @@
 // Check login and display user information
-document.addEventListener('DOMContentLoaded', function() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
+const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+if (currentUser) {
     // Display user information
     const usernameElement = document.getElementById('username');
     const welcomeHeading = document.querySelector('.container h1');
@@ -18,11 +18,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutButton = document.querySelector('.btn.btn-danger');
     if (logoutButton) {
         logoutButton.addEventListener('click', function() {
-            const confirmLogout = confirm('Are you sure you want to logout?');
-            if (confirmLogout) {
+            const logoutModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+            document.getElementById('notificationMessage').textContent = 'Are you sure you want to logout?';
+            logoutModal.show();
+            
+            // Handle confirm logout
+            document.getElementById('confirmLogout').addEventListener('click', function() {
                 localStorage.removeItem('currentUser');
                 window.location.href = '../HTML/login.html';
-            }
+            });
         });
     }
-});
+} 
