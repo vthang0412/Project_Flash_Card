@@ -8,58 +8,56 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/dashboard.css">
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
-            <!-- Logo -->
-            <a class="navbar-brand fw-bold" href="../index.html">VocabApp</a>
-            <!-- Links -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="./categories.html">Categories</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./vocabulary.html">Vocabulary</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./flashcard.html">Flashcards</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./quiz.html">Quiz</a></li>
-                </ul>
-                <!-- User Info and Logout -->
-                <div class="d-flex align-items-center">
-                    <span class="me-3">Hi, Nguyễn Thành Nam!</span>
-                    <button class="btn btn-danger">Logout</button>
+    <div class="content-wrapper">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand fw-bold" href="../index.html">VocabApp</a>
+                <!-- Links -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="./categories.html">Categories</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./vocabulary.html">Vocabulary</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./flashcard.html">Flashcards</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./quiz.html">Quiz</a></li>
+                    </ul>
+                    <!-- User Info and Logout -->
+                    <div class="d-flex align-items-center">
+                        <span class="me-3" id="username"></span>
+                        <button class="btn btn-danger">Logout</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <!-- Main Content -->
-    <div class="container text-center mt-5">
-        <h1 class="fw-bold">Chào mừng bạn đã quay lại học, Nguyễn Thành Nam!</h1>
-        <p class="text-muted">Tiếp tục học từ vựng và cải thiện kỹ năng của bạn ngay hôm nay.</p>
-        <button class="btn btn-success">Làm Quiz</button>
+        <!-- Main Content -->
+        <div class="container text-center mt-5">
+            <h1 class="fw-bold">Chào mừng bạn đã quay lại học,</h1>
+            <p class="text-muted">Tiếp tục học từ vựng và cải thiện kỹ năng của bạn ngay hôm nay.</p>
+            <button class="btn btn-success">Làm Quiz</button>
+        </div>
     </div>
 
     <!-- Footer -->
-    <footer class="text-center mt-auto py-3 bg-light">
+    <footer class="text-center py-3 bg-light" id="footer">
         <p class="mb-0">© 2024 VocabApp. All rights reserved.</p>
     </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.querySelector('.btn.btn-danger').addEventListener('click', function () {
-            const confirmLogout = confirm('Bạn có chắc chắn muốn đăng xuất không?');
-            if (confirmLogout) {
-                alert('Đăng xuất thành công!');
-                window.location.href = 'login.html';
-            }
-        });
+    <script src="../JS/auth.js">
+        
     </script>
+    <script src="../JS/app.js"></script>
 </body>
 
 </html>
