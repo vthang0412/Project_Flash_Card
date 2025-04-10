@@ -1,7 +1,7 @@
 // Khởi tạo mảng từ vựng từ localStorage hoặc mảng rỗng nếu chưa có
 let vocabularyList = JSON.parse(localStorage.getItem('vocabularyList')) || [];
 let currentPage = 1;
-const itemsPerPage = 10;
+const itemsPerPage = 7;
 let currentFilter = '';
 
 // Cập nhật danh sách danh mục trong dropdown
@@ -100,10 +100,10 @@ function displayVocabularyList() {
                 <td>${vocab.category}</td>
                 <td>
                     <button class="btn btn-sm btn-primary me-2" onclick="openEditModal(${vocabularyList.indexOf(vocab)})">
-                        <i class="fas fa-edit"></i> Sửa
+                        <i class="fas fa-edit"></i> Edit
                     </button>
                     <button class="btn btn-sm btn-danger" onclick="openDeleteModal(${vocabularyList.indexOf(vocab)})">
-                        <i class="fas fa-trash"></i> Xóa
+                        <i class="fas fa-trash"></i> Delete
                     </button>
                 </td>
             `;
@@ -159,7 +159,7 @@ function addVocabulary(word, meaning, category) {
         word: word,
         meaning: meaning,
         category: category
-    });
+    }); 
     saveToLocalStorage();
     displayVocabularyList();
     return true;
@@ -183,16 +183,37 @@ function editVocabulary(index, word, meaning, category) {
 
 // Validation cho input từ vựng
 function validateVocabularyInput(word, meaning, category, currentWord = '') {
+    const newWord = document.querySelector('#newWord + .invalid-feedback');
+    const newMeaning = document.querySelector('#newMeaning + .invalid-feedback');
+    const newCategory = document.querySelector('#newCategory + .invalid-feedback');
     if (!word.trim()) {
-        alert('Please enter a word');
+        newWord.textContent = 'Please enter a word';
+        newWord.classList.remove('hidden');
+        return false;
+    }
+    if (word.trim().length < 2){
+        newWord.textContent = 'Word must be at least 2 characters long';
+        newWord.classList.remove('hidden');
+        return false;
+    }
+    if (word.trim().split('').some(char => !isNaN(char) && char !== ' ')) {
+        newWord.textContent = 'Word cannot contain numbers or a mix of numbers and letters';
+        newWord.classList.remove('hidden');
+        return false;
+    }
+    if(word.trim().includes('f')){
+        newWord.textContent = 'Word cannot contain the letter "f"';
+        newWord.classList.remove('hidden');
         return false;
     }
     if (!meaning.trim()) {
-        alert('Please enter the meaning');
+        newMeaning.textContent = 'Please enter the meaning';
+        newMeaning.classList.remove('hidden');
         return false;
     }
     if (!category) {
-        alert('Please select a category');
+        newCategory.textContent = 'Please select a category';
+        newCategory.classList.remove('hidden');
         return false;
     }
     
@@ -201,7 +222,9 @@ function validateVocabularyInput(word, meaning, category, currentWord = '') {
         v => v.word.toLowerCase() === word.toLowerCase()
     );
     if (existingWord && word.toLowerCase() !== currentWord.toLowerCase()) {
-        alert('This word already exists');
+        // Không dùng alert mà dùng textcontent để hiển thị thông báo
+        newWord.textContent = 'This word already exists';
+        newWord.classList.remove('hidden');
         return false;
     }
     
@@ -236,10 +259,10 @@ function searchVocabulary(searchTerm) {
             <td>${vocab.category}</td>
             <td>
                 <button class="btn btn-sm btn-primary me-2" onclick="openEditModal(${vocabularyList.indexOf(vocab)})">
-                    <i class="fas fa-edit"></i> Sửa
+                    <i class="fas fa-edit"></i> Edit
                 </button>
                 <button class="btn btn-sm btn-danger" onclick="openDeleteModal(${vocabularyList.indexOf(vocab)})">
-                    <i class="fas fa-trash"></i> Xóa
+                    <i class="fas fa-trash"></i> Delete
                 </button>
             </td>
         `;

@@ -36,17 +36,6 @@ function displayCurrentCard() {
     document.getElementById('cardMeaning').textContent = currentWord.meaning;
 }
 
-// Lật thẻ
-function flipCard() {
-    const flashcardInner = document.querySelector('.flashcard-inner');
-    isFlipped = !isFlipped;
-    if (isFlipped) {
-        flashcardInner.style.transform = 'rotateY(180deg)';
-    } else {
-        flashcardInner.style.transform = 'rotateY(0deg)';
-    }
-}
-
 // Chuyển đến thẻ tiếp theo
 function nextCard() {
     if (currentCardIndex < vocabularyList.length - 1) {

@@ -9,7 +9,6 @@ function showNotification(message, callback) {
         modalElement.removeEventListener('hidden.bs.modal', handler);
         if (callback) callback();
     });
-    
     notificationModal.show();
 }
 
@@ -143,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             localStorage.setItem("users", JSON.stringify(users));
 
-            alert("Registration successful!");
+            // alert("Registration successful!");
             window.location.href = "login.html";
         });
     }
@@ -207,10 +206,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Đăng nhập thành công
             localStorage.setItem('currentUser', JSON.stringify(user));
-            alert("Login successful!");
             window.location.href = "dashboard.html";
         });
     }
 });
 
-    // Xử lý logout
