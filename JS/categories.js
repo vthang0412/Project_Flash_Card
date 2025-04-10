@@ -1,7 +1,7 @@
 // Khởi tạo mảng danh mục từ localStorage hoặc mảng rỗng nếu chưa có
 let categories = JSON.parse(localStorage.getItem('categories')) || [];
 let currentCategoryPage = 1;
-const categoryItemsPerPage = 7;
+const categoryItemsPerPage = 6;
 
 // Hiển thị danh sách danh mục
 function displayCategories() {
@@ -10,18 +10,16 @@ function displayCategories() {
     if (!categoryTableBody) return;
 
     categoryTableBody.innerHTML = '';
-    
+
     // Tính toán phân trang
     const startIndex = (currentCategoryPage - 1) * categoryItemsPerPage;
     const endIndex = startIndex + categoryItemsPerPage;
     const paginatedCategories = categories.slice(startIndex, endIndex);
-    
-    if (paginatedCategories.length === 0) {
-        categoryTableBody.innerHTML = `
-            <tr>
-                <td colspan="4" class="text-center">No categories found</td>
-            </tr>
-        `;
+    if (paginatedCategories.length === 0 && currentCategoryPage > 1) {
+        currentCategoryPage = 1;
+        // currentCategoryPage = Math.ceil(categories.length / categoryItemsPerPage);
+        displayCategories();
+        return;
     } else {
         paginatedCategories.forEach((category, index) => {
             const row = document.createElement('tr');
@@ -46,14 +44,13 @@ function displayCategories() {
     if (categoryPagination) {
         const totalPages = Math.ceil(categories.length / categoryItemsPerPage);
         let paginationHTML = '';
-        
         // Nút Previous
         paginationHTML += `
             <li class="page-item ${currentCategoryPage === 1 ? 'disabled' : ''}">
                 <a class="page-link" href="#" onclick="changeCategoryPage(${currentCategoryPage - 1})">Previous</a>
             </li>
         `;
-        
+
         // Các nút số trang
         for (let i = 1; i <= totalPages; i++) {
             paginationHTML += `
@@ -62,14 +59,14 @@ function displayCategories() {
                 </li>
             `;
         }
-        
+
         // Nút Next
         paginationHTML += `
             <li class="page-item ${currentCategoryPage === totalPages ? 'disabled' : ''}">
                 <a class="page-link" href="#" onclick="changeCategoryPage(${currentCategoryPage + 1})">Next</a>
             </li>
         `;
-        
+
         categoryPagination.innerHTML = paginationHTML;
     }
 
@@ -103,20 +100,25 @@ function addCategory(name, description) {
         if (newCategoryName) {
             newCategoryName.textContent = 'Category name already exists!';
             newCategoryName.classList.remove('hidden');
+            return false;
         }
         return false;
     }
     if (!validateCategoryInput(name, description)) return false;
+    // function toTitleCase(str) {
+    //     return str
+    //         .toLowerCase()
+    //         .split(" ")
+    //         .filter(word => word)
+    //         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    //         .join(" ");
+    // }
+    // name = toTitleCase(name);
 
-    function toTitleCase(str) {
-        return str
-            .toLowerCase()
-            .split(" ")
-            .filter(word => word)
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
-    }
-    name = toTitleCase(name);
+    name = name
+        .split('')
+        .filter(char => /[a-zA-Z\s]/.test(char))
+        .join('');
 
     categories.push({
         name: name,
@@ -134,6 +136,7 @@ function editCategory(index, name, description) {
     if (categories.some((cat, i) => i !== index && cat.name.toLowerCase() === name.toLowerCase())) {
         const currentCategory = categories[index].name;
         if (!validateCategoryInput(name, description, currentCategory)) return false;
+        return false;
     }
     categories[index] = {
         name: name,
@@ -150,8 +153,8 @@ function deleteCategory(index) {
     const vocabularyList = JSON.parse(localStorage.getItem('vocabularyList')) || [];
     const categoryName = categories[index].name;
     if (vocabularyList.some(vocab => vocab.category === categoryName)) {
-        // Sử dụng modal dể thông báo rằng danh mục đang được sử dụng và khi xóa sẽ ẩn modal cũ và hiện modal xác nh
-        
+        // Sử dụng modal dể thông báo rằng danh mục đang được sử dụng và khi xóa sẽ ẩn modal cũ và hiện modal xác nhận
+
         return false;
     }
     categories.splice(index, 1);
@@ -172,12 +175,12 @@ function searchCategories(searchTerm) {
     if (!categoryTableBody) return;
 
     categoryTableBody.innerHTML = '';
-    
+
     // Tính toán phân trang
     const startIndex = (currentCategoryPage - 1) * categoryItemsPerPage;
     const endIndex = startIndex + categoryItemsPerPage;
     const paginatedCategories = filteredCategories.slice(startIndex, endIndex);
-    
+
     if (paginatedCategories.length === 0) {
         categoryTableBody.innerHTML = `
             <tr>
@@ -203,37 +206,7 @@ function searchCategories(searchTerm) {
             categoryTableBody.appendChild(row);
         });
     }
-
-    // Hiển thị phân trang
-    if (categoryPagination) {
-        const totalPages = Math.ceil(filteredCategories.length / categoryItemsPerPage);
-        let paginationHTML = '';
-        
-        // Nút Previous
-        paginationHTML += `
-            <li class="page-item ${currentCategoryPage === 1 ? 'disabled' : ''}">
-                <a class="page-link" href="#" onclick="changeCategoryPage(${currentCategoryPage - 1})">Previous</a>
-            </li>
-        `;
-        
-        // Các nút số trang
-        for (let i = 1; i <= totalPages; i++) {
-            paginationHTML += `
-                <li class="page-item ${currentCategoryPage === i ? 'active' : ''}">
-                    <a class="page-link" href="#" onclick="changeCategoryPage(${i})">${i}</a>
-                </li>
-            `;
-        }
-        
-        // Nút Next
-        paginationHTML += `
-            <li class="page-item ${currentCategoryPage === totalPages ? 'disabled' : ''}">
-                <a class="page-link" href="#" onclick="changeCategoryPage(${currentCategoryPage + 1})">Next</a>
-            </li>
-        `;
-        
-        categoryPagination.innerHTML = paginationHTML;
-    }
+    // paginationCategories();
 }
 
 // Lưu vào localStorage
@@ -331,4 +304,36 @@ function validateCategoryInput(newName, description) {
         return false;
     }
     return true;
+}
+function paginationCategories() {
+    // Hiển thị phân trang
+    if (categoryPagination) {
+        const totalPages = Math.ceil(filteredCategories.length / categoryItemsPerPage);
+        let paginationHTML = '';
+
+        // Nút Previous
+        paginationHTML += `
+            <li class="page-item ${currentCategoryPage === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changeCategoryPage(${currentCategoryPage - 1})">Previous</a>
+            </li>
+        `;
+
+        // Các nút số trang
+        for (let i = 1; i <= totalPages; i++) {
+            paginationHTML += `
+                <li class="page-item ${currentCategoryPage === i ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="changeCategoryPage(${i})">${i}</a>
+                </li>
+            `;
+        }
+
+        // Nút Next
+        paginationHTML += `
+            <li class="page-item ${currentCategoryPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changeCategoryPage(${currentCategoryPage + 1})">Next</a>
+            </li>
+        `;
+
+        categoryPagination.innerHTML = paginationHTML;
+    }
 }

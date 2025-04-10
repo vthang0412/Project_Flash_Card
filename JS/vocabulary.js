@@ -1,7 +1,7 @@
 // Khởi tạo mảng từ vựng từ localStorage hoặc mảng rỗng nếu chưa có
 let vocabularyList = JSON.parse(localStorage.getItem('vocabularyList')) || [];
 let currentPage = 1;
-const itemsPerPage = 7;
+const itemsPerPage = 6;
 let currentFilter = '';
 
 // Cập nhật danh sách danh mục trong dropdown
@@ -12,7 +12,7 @@ function updateCategoryFilter() {
 
     // Keep the "All Categories" option
     categoryList.innerHTML = `<li><a class="dropdown-item ${!currentFilter ? 'active' : ''}" href="#" data-category="">All Categories</a></li>`;
-    
+
     // Add categories that have vocabulary words
     const usedCategories = [...new Set(vocabularyList.map(vocab => vocab.category))];
     usedCategories.forEach(category => {
@@ -32,14 +32,14 @@ function updateCategoryFilter() {
             e.preventDefault();
             const selectedCategory = e.target.dataset.category;
             currentFilter = selectedCategory;
-            
+
             // Update button text
             categoryDropdown.textContent = selectedCategory || 'All Categories';
-            
+
             // Update active state
             dropdownItems.forEach(item => item.classList.remove('active'));
             e.target.classList.add('active');
-            
+
             // Reset to first page and display filtered list
             currentPage = 1;
             displayVocabularyList();
@@ -75,19 +75,21 @@ function displayVocabularyList() {
     if (!vocabularyTableBody) return;
 
     vocabularyTableBody.innerHTML = '';
-    
+
     // Lấy danh sách đã lọc
     const filteredList = filterVocabularyList();
-    
+
     // Tính toán phân trang
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedList = filteredList.slice(startIndex, endIndex);
-    
+
     if (paginatedList.length === 0) {
         vocabularyTableBody.innerHTML = `
             <tr>
-                <td colspan="5" class="text-center">Không có từ vựng nào</td>
+                <td colspan="5" class="text-center">
+                No vocabulary found
+                </td>
             </tr>
         `;
     } else {
@@ -115,14 +117,13 @@ function displayVocabularyList() {
     if (paginationContainer) {
         const totalPages = Math.ceil(filteredList.length / itemsPerPage);
         let paginationHTML = '';
-        
-        // Nút Previous
+        // Nếu xóa từ tra
         paginationHTML += `
             <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
                 <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Previous</a>
             </li>
         `;
-        
+
         // Các nút số trang
         for (let i = 1; i <= totalPages; i++) {
             paginationHTML += `
@@ -131,14 +132,14 @@ function displayVocabularyList() {
                 </li>
             `;
         }
-        
+
         // Nút Next
         paginationHTML += `
             <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
                 <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Next</a>
             </li>
         `;
-        
+
         paginationContainer.innerHTML = paginationHTML;
     }
 }
@@ -154,12 +155,12 @@ function changePage(page) {
 function addVocabulary(word, meaning, category) {
     // Validation
     if (!validateVocabularyInput(word, meaning, category)) return false;
-    
+
     vocabularyList.push({
         word: word,
         meaning: meaning,
         category: category
-    }); 
+    });
     saveToLocalStorage();
     displayVocabularyList();
     return true;
@@ -170,7 +171,6 @@ function editVocabulary(index, word, meaning, category) {
     // Validation
     const currentWord = vocabularyList[index].word;
     if (!validateVocabularyInput(word, meaning, category, currentWord)) return false;
-    
     vocabularyList[index] = {
         word: word,
         meaning: meaning,
@@ -191,21 +191,21 @@ function validateVocabularyInput(word, meaning, category, currentWord = '') {
         newWord.classList.remove('hidden');
         return false;
     }
-    if (word.trim().length < 2){
-        newWord.textContent = 'Word must be at least 2 characters long';
-        newWord.classList.remove('hidden');
-        return false;
-    }
-    if (word.trim().split('').some(char => !isNaN(char) && char !== ' ')) {
-        newWord.textContent = 'Word cannot contain numbers or a mix of numbers and letters';
-        newWord.classList.remove('hidden');
-        return false;
-    }
-    if(word.trim().includes('f')){
-        newWord.textContent = 'Word cannot contain the letter "f"';
-        newWord.classList.remove('hidden');
-        return false;
-    }
+    // if (word.trim().length < 2){
+    //     newWord.textContent = 'Word must be at least 2 characters long';
+    //     newWord.classList.remove('hidden');
+    //     return false;
+    // }
+    // if (word.trim().split('').some(char => !isNaN(char) && char !== ' ')) {
+    //     newWord.textContent = 'Word cannot contain numbers or a mix of numbers and letters';
+    //     newWord.classList.remove('hidden');
+    //     return false;
+    // }
+    // if(word.trim().includes('f')){
+    //     newWord.textContent = 'Word cannot contain the letter "f"';
+    //     newWord.classList.remove('hidden');
+    //     return false;
+    // }
     if (!meaning.trim()) {
         newMeaning.textContent = 'Please enter the meaning';
         newMeaning.classList.remove('hidden');
@@ -216,7 +216,7 @@ function validateVocabularyInput(word, meaning, category, currentWord = '') {
         newCategory.classList.remove('hidden');
         return false;
     }
-    
+
     // Kiểm tra từ vựng đã tồn tại (trừ trường hợp đang sửa chính từ đó)
     const existingWord = vocabularyList.find(
         v => v.word.toLowerCase() === word.toLowerCase()
@@ -227,7 +227,7 @@ function validateVocabularyInput(word, meaning, category, currentWord = '') {
         newWord.classList.remove('hidden');
         return false;
     }
-    
+
     return true;
 }
 
@@ -240,7 +240,7 @@ function deleteVocabulary(index) {
 
 // Tìm kiếm từ vựng
 function searchVocabulary(searchTerm) {
-    const filteredList = vocabularyList.filter(vocab => 
+    const filteredList = vocabularyList.filter(vocab =>
         vocab.word.toLowerCase().includes(searchTerm.toLowerCase()) ||
         vocab.meaning.toLowerCase().includes(searchTerm.toLowerCase()) ||
         vocab.category.toLowerCase().includes(searchTerm.toLowerCase())
@@ -279,13 +279,13 @@ function saveToLocalStorage() {
 function updateCategoryDropdowns() {
     const categories = JSON.parse(localStorage.getItem('categories')) || [];
     const dropdowns = document.querySelectorAll('.category-dropdown');
-    
+
     dropdowns.forEach(dropdown => {
         // Giữ lại option đầu tiên (placeholder)
         const firstOption = dropdown.options[0];
         dropdown.innerHTML = '';
         dropdown.appendChild(firstOption);
-        
+
         // Thêm các danh mục
         categories.forEach(category => {
             const option = document.createElement('option');
@@ -313,7 +313,7 @@ function openEditModal(index) {
     document.getElementById('editWord').value = vocab.word;
     document.getElementById('editMeaning').value = vocab.meaning;
     document.getElementById('editCategory').value = vocab.category;
-    
+
     const editModal = new bootstrap.Modal(document.getElementById('editVocabModal'));
     editModal.show();
 }
@@ -325,7 +325,7 @@ function openDeleteModal(index) {
 }
 
 // Event Listeners
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Khởi tạo hiển thị ban đầu
     displayVocabularyList();
     updateCategoryFilter();
@@ -334,12 +334,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form thêm từ vựng mới
     const addForm = document.getElementById('addVocabForm');
     if (addForm) {
-        addForm.addEventListener('submit', function(e) {
+        addForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const word = document.getElementById('newWord').value;
             const meaning = document.getElementById('newMeaning').value;
             const category = document.getElementById('newCategory').value;
-            
+
             if (addVocabulary(word, meaning, category)) {
                 // Đóng modal nếu thêm thành công
                 const addModal = bootstrap.Modal.getInstance(document.getElementById('addVocabModal'));
@@ -355,13 +355,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form sửa từ vựng
     const editForm = document.getElementById('editVocabForm');
     if (editForm) {
-        editForm.addEventListener('submit', function(e) {
+        editForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const index = document.getElementById('editIndex').value;
             const word = document.getElementById('editWord').value;
             const meaning = document.getElementById('editMeaning').value;
             const category = document.getElementById('editCategory').value;
-            
+
             if (editVocabulary(parseInt(index), word, meaning, category)) {
                 // Đóng modal nếu sửa thành công
                 const editModal = bootstrap.Modal.getInstance(document.getElementById('editVocabModal'));
@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form xóa từ vựng
     const deleteForm = document.getElementById('deleteVocabForm');
     if (deleteForm) {
-        deleteForm.addEventListener('submit', function(e) {
+        deleteForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const index = document.getElementById('deleteIndex').value;
             deleteVocabulary(parseInt(index));
@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Tìm kiếm từ vựng
     const searchInput = document.getElementById('searchVocab');
     if (searchInput) {
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function () {
             currentPage = 1;
             displayVocabularyList();
         });

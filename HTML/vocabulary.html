@@ -145,17 +145,20 @@
                         <input type="hidden" id="editIndex">
                         <div class="mb-3">
                             <label for="editWord" class="form-label">Word</label>
-                            <input type="text" class="form-control" id="editWord" required>
+                            <input type="text" class="form-control" id="editWord" >
+                            <div class="invalid-feedback text-red-500 text-sm hidden"></div>
                         </div>
                         <div class="mb-3">
                             <label for="editMeaning" class="form-label">Meaning</label>
-                            <input type="text" class="form-control" id="editMeaning" required>
+                            <input type="text" class="form-control" id="editMeaning" >
+                            <div class="invalid-feedback text-red-500 text-sm hidden"></div>
                         </div>
                         <div class="mb-3">
                             <label for="editCategory" class="form-label">Category</label>
-                            <select class="form-select category-dropdown" id="editCategory" required>
+                            <select class="form-select category-dropdown" id="editCategory" >
                                 <option value="">Select Category</option>
                             </select>
+                            <div class="invalid-feedback text-red-500 text-sm hidden"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
