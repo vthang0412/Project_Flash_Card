@@ -1,24 +1,11 @@
-// Function to show notification modal
-function showNotification(message, callback) {
-    const notificationModal = new bootstrap.Modal(document.getElementById('notificationModal'));
-    document.getElementById('notificationMessage').textContent = message;
-    
-    // Handle modal hidden event
-    const modalElement = document.getElementById('notificationModal');
-    modalElement.addEventListener('hidden.bs.modal', function handler() {
-        modalElement.removeEventListener('hidden.bs.modal', handler);
-        if (callback) callback();
-    });
-    notificationModal.show();
-}
-
-// Xử lý form đăng ký
 document.addEventListener("DOMContentLoaded", function () {
     const registerForm = document.getElementById("registerForm");
+    const loginForm = document.getElementById("loginForm");
 
+    // Register form handling
     if (registerForm) {
         registerForm.addEventListener("submit", function (e) {
-            e.preventDefault(); // Ngăn chặn reload trang
+            e.preventDefault();
 
             const firstName = document.getElementById("firstName");
             const lastName = document.getElementById("lastName");
@@ -26,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const password = document.getElementById("password");
             const confirmPassword = document.getElementById("confirmPassword");
 
-            // Truy cập trực tiếp các phần tử thông báo lỗi
             const firstNameFeedback = document.querySelector("#firstName + .invalid-feedback");
             const lastNameFeedback = document.querySelector("#lastName + .invalid-feedback");
             const emailFeedback = document.querySelector("#email + .invalid-feedback");
@@ -34,11 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const confirmPasswordFeedback = document.querySelector("#confirmPassword + .invalid-feedback");
 
             let isValid = true;
-
-            // Lấy danh sách người dùng đã đăng ký từ localStorage
             const users = JSON.parse(localStorage.getItem("users")) || [];
 
-            // Kiểm tra First Name
+            // First name validation
             if (!firstName.value.trim()) {
                 firstName.classList.add("is-invalid");
                 firstNameFeedback.textContent = "Please provide a valid first name.";
@@ -49,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 firstNameFeedback.classList.add("hidden");
             }
 
-            // Kiểm tra Last Name
+            // Last name validation
             if (!lastName.value.trim()) {
                 lastName.classList.add("is-invalid");
                 lastNameFeedback.textContent = "Please provide a valid last name.";
@@ -60,9 +44,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 lastNameFeedback.classList.add("hidden");
             }
 
-            // Kiểm tra Email
+            // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const isEmailUnique = !users.some(user => user.email === email.value.trim());
+
             if (!email.value.trim()) {
                 email.classList.add("is-invalid");
                 emailFeedback.textContent = "Please provide a valid email address.";
@@ -83,28 +68,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 emailFeedback.classList.add("hidden");
             }
 
-            // Kiểm tra Password
-            if (!password.value.trim()) {
+            // Password validation
+            const pwd = password.value;
+            if (!pwd.trim()) {
                 password.classList.add("is-invalid");
                 passwordFeedback.textContent = "Password cannot be empty.";
                 passwordFeedback.classList.remove("hidden");
                 isValid = false;
-            } else if (password.value.length < 8) {
+            } else if (pwd.length < 8) {
                 password.classList.add("is-invalid");
                 passwordFeedback.textContent = "Password must be at least 8 characters long.";
                 passwordFeedback.classList.remove("hidden");
                 isValid = false;
-            } else if (!/[A-Z]/.test(password.value)) {
+            } else if (!/[A-Z]/.test(pwd)) {
                 password.classList.add("is-invalid");
                 passwordFeedback.textContent = "Password must contain at least one uppercase letter.";
                 passwordFeedback.classList.remove("hidden");
                 isValid = false;
-            } else if (!/[a-z]/.test(password.value)) {
+            } else if (!/[a-z]/.test(pwd)) {
                 password.classList.add("is-invalid");
                 passwordFeedback.textContent = "Password must contain at least one lowercase letter.";
                 passwordFeedback.classList.remove("hidden");
                 isValid = false;
-            } else if (!/[0-9]/.test(password.value)) {
+            } else if (!/[0-9]/.test(pwd)) {
                 password.classList.add("is-invalid");
                 passwordFeedback.textContent = "Password must contain at least one number.";
                 passwordFeedback.classList.remove("hidden");
@@ -114,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 passwordFeedback.classList.add("hidden");
             }
 
-            // Kiểm tra Confirm Password
+            // Confirm password
             if (!confirmPassword.value.trim()) {
                 confirmPassword.classList.add("is-invalid");
                 confirmPasswordFeedback.textContent = "Confirm Password cannot be empty.";
@@ -130,46 +116,43 @@ document.addEventListener("DOMContentLoaded", function () {
                 confirmPasswordFeedback.classList.add("hidden");
             }
 
-            // Nếu có lỗi, dừng xử lý
             if (!isValid) return;
 
-            // Lưu thông tin người dùng và chuyển hướng
+            // Save new user
             users.push({
                 firstName: firstName.value.trim(),
                 lastName: lastName.value.trim(),
                 email: email.value.trim(),
                 password: password.value,
             });
+
             localStorage.setItem("users", JSON.stringify(users));
 
-            // alert("Registration successful!");
-            window.location.href = "login.html";
+            showNotification("Registration successful! Redirecting to login page...", function () {
+                window.location.href = "login.html";
+            });
         });
     }
 
-    // Xử lý form đăng nhập
-    const loginForm = document.getElementById("loginForm");
+    // Login form handling
     if (loginForm) {
         loginForm.addEventListener("submit", function (e) {
-            e.preventDefault(); // Ngăn chặn reload trang
+            e.preventDefault();
 
             const emailInput = document.getElementById("loginEmail");
             const passwordInput = document.getElementById("loginPassword");
 
-            // Truy cập trực tiếp các phần tử thông báo lỗi
             const emailFeedback = document.querySelector("#loginEmail + .invalid-feedback");
             const passwordFeedback = document.querySelector("#loginPassword + .invalid-feedback");
 
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
 
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const user = users.find(user => user.email === email);
+
             let isValid = true;
 
-            // Lấy danh sách người dùng từ localStorage
-            const users = JSON.parse(localStorage.getItem("users")) || [];
-
-            // Kiểm tra Email
-            const user = users.find(user => user.email === email);
             if (!email) {
                 emailInput.classList.add("is-invalid");
                 emailFeedback.textContent = "Email cannot be empty.";
@@ -185,13 +168,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 emailFeedback.classList.add("hidden");
             }
 
-            // Kiểm tra Password
             if (!password) {
                 passwordInput.classList.add("is-invalid");
                 passwordFeedback.textContent = "Password cannot be empty.";
                 passwordFeedback.classList.remove("hidden");
                 isValid = false;
-            } else if (!user || (user && user.password !== password)) {
+            } else if (!user || user.password !== password) {
                 passwordInput.classList.add("is-invalid");
                 passwordFeedback.textContent = "Invalid email or password.";
                 passwordFeedback.classList.remove("hidden");
@@ -201,13 +183,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 passwordFeedback.classList.add("hidden");
             }
 
-            // Nếu có lỗi, dừng xử lý
             if (!isValid) return;
 
-            // Đăng nhập thành công
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            window.location.href = "dashboard.html";
+            localStorage.setItem("currentUser", JSON.stringify(user));
+
+            showNotification("Login successful! Redirecting to dashboard...", function () {
+                window.location.href = "dashboard.html";
+            });
         });
     }
 });
+// Function to show notification modal
+function showNotification(message, callback) {
+    const modalElement = document.getElementById('notificationModal');
+    const notificationMessage = document.getElementById('notificationMessage');
+    const notificationModal = new bootstrap.Modal(modalElement);
 
+    notificationMessage.textContent = message;
+
+    const handler = function () {
+        modalElement.removeEventListener('hidden.bs.modal', handler);
+        if (callback) callback();
+    };
+
+    modalElement.addEventListener('hidden.bs.modal', handler);
+    notificationModal.show();
+}

@@ -105,6 +105,7 @@ function addCategory(name, description) {
         return false;
     }
     if (!validateCategoryInput(name, description)) return false;
+
     // function toTitleCase(str) {
     //     return str
     //         .toLowerCase()
@@ -132,12 +133,19 @@ function addCategory(name, description) {
 
 // Sửa danh mục
 function editCategory(index, name, description) {
+    const editCategoryNameFeedback = document.querySelector('#editCategoryName + .invalid-feedback');
+    const editCategoryDescriptionFeedback = document.querySelector('#editCategoryDescription + .invalid-feedback');
+
     // Kiểm tra xem tên mới có trùng với danh mục khác không
     if (categories.some((cat, i) => i !== index && cat.name.toLowerCase() === name.toLowerCase())) {
-        const currentCategory = categories[index].name;
-        if (!validateCategoryInput(name, description, currentCategory)) return false;
+        if (editCategoryNameFeedback) {
+            editCategoryNameFeedback.textContent = 'Category name already exists!';
+            editCategoryNameFeedback.classList.remove('hidden');
+        }
         return false;
     }
+
+    // Cập nhật danh mục
     categories[index] = {
         name: name,
         description: description
@@ -146,7 +154,6 @@ function editCategory(index, name, description) {
     displayCategories();
     return true;
 }
-
 // Xóa danh mục
 function deleteCategory(index) {
     // Kiểm tra xem danh mục có đang được sử dụng không
@@ -297,6 +304,7 @@ function validateCategoryInput(newName, description) {
     const newCategoryDescription = document.querySelector('#newCategoryDescription + .invalid-feedback');
     if (!newName.trim()) {
         newCategoryName.textContent = 'Please enter a category name';
+        newCategoryName.classList.remove('hidden');
         return false;
     }
     if (!description.trim()) {

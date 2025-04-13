@@ -84,14 +84,11 @@ function displayVocabularyList() {
     const endIndex = startIndex + itemsPerPage;
     const paginatedList = filteredList.slice(startIndex, endIndex);
 
-    if (paginatedList.length === 0) {
-        vocabularyTableBody.innerHTML = `
-            <tr>
-                <td colspan="5" class="text-center">
-                No vocabulary found
-                </td>
-            </tr>
-        `;
+    if (paginatedList.length === 0 && currentPage > 1) {
+        currentPage = 1;
+        // currentPage = Math.ceil(vocabularyList.length / itemsPerPage);
+        displayVocabularyList();
+        return;
     } else {
         paginatedList.forEach((vocab, index) => {
             const row = document.createElement('tr');

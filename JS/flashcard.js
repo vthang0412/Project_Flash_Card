@@ -2,7 +2,6 @@
 let vocabularyList = JSON.parse(localStorage.getItem('vocabularyList')) || [];
 let currentCardIndex = 0;
 let isFlipped = false;
-
 // Khởi tạo flashcard khi trang load
 document.addEventListener('DOMContentLoaded', function() {
     initializeFlashcards();
@@ -14,6 +13,15 @@ document.addEventListener('DOMContentLoaded', function() {
         flashcard.addEventListener('click', flipCard);
     }
 });
+// Hàm lật thẻ flashcard
+function flipCard() {
+    const flashcardInner = document.querySelector('.flashcard-inner');
+    if (flashcardInner) {
+        isFlipped = !isFlipped;
+        flashcardInner.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+    }
+}
+document.querySelector('.flashcard').addEventListener('click', flipCard);
 
 // Khởi tạo flashcards
 function initializeFlashcards() {
@@ -78,8 +86,7 @@ function updateWordList() {
             <td class="px-6 py-4 whitespace-nowrap">${word.word}</td>
             <td class="px-6 py-4 whitespace-nowrap">${word.meaning}</td>
             <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                    ${word.learned ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
+                <span class="${word.learned ? 'badge-learned' : 'badge-not-learned'}">
                     ${word.learned ? 'Learned' : 'Not Learned'}
                 </span>
             </td>
@@ -87,7 +94,6 @@ function updateWordList() {
         wordListBody.appendChild(row);
     });
 }
-
 // Cập nhật thanh tiến trình
 function updateProgress() {
     const progressText = document.getElementById('progressText');
